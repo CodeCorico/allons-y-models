@@ -1,0 +1,34 @@
+{
+  "name": "allons-y-models",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CodeCorico/allons-y-models.git"
+  },
+  "author": "CodeCorico <hello@codecorico.com>",
+  "bugs": {
+    "url": "https://github.com/CodeCorico/allons-y-models/issues"
+  },
+  "homepage": "https://github.com/CodeCorico/allons-y-models",
+  "engines": {
+    "node": ">=4.1",
+    "npm": ">=3.2"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.0.1",
+    "events-manager": "^1.1.2",
+    "extend": "^3.0.0",
+    "fs-extra": "^0.30.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^2.0.0",
+    "sails-mongo": "^0.12.1",
+    "sails-mysql": "^0.11.5",
+    "sails-postgresql": "^0.11.4",
+    "sails-redis": "^0.10.7",
+    "waterline": "^0.12.2"
+  }
+}
