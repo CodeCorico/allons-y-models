@@ -128,7 +128,7 @@ module.exports = function() {
 
           var callbacks = $socket._callbacks['$' + returnMessage];
           if (callbacks) {
-            $.each(callbacks, function(i, callback) {
+            callbacks.forEach(function(callback) {
               callback(returnArgs);
             });
           }
