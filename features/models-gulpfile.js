@@ -50,6 +50,6 @@ module.exports = function($allonsy, $gulp) {
 
   return {
     task: 'models',
-    watch: './features/**/models/' + filesPattern
+    watch: $allonsy.globPatterns('models/' + filesPattern)
   };
 };
