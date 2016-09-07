@@ -20,7 +20,8 @@ module.exports = function() {
           _waterline = null,
           _models = [],
           _connections = [],
-          _modelsSchemas = {};
+          _modelsSchemas = {},
+          _modelsConnections = {};
 
       this.models = function() {
         return _models;
@@ -34,12 +35,13 @@ module.exports = function() {
         return _waterline;
       };
 
-      this.loadModel = function(name, identity, model) {
+      this.loadModel = function(name, identity, connection, model) {
         _modelsSchemas[identity] = name;
+        _modelsConnections[identity] = connection;
         _waterline.loadCollection(model);
       };
 
-      this.initModels = function(callback) {
+      this.initModels = function(createIndexes, callback) {
         $allonsy.log('allons-y-models', 'models-init-start');
 
         var waterlineConfig = {
@@ -133,7 +135,11 @@ module.exports = function() {
             var model = DependencyInjection.injector.model.get(_modelsSchemas[identity]);
 
             async.waterfall([function(callback) {
-              if (!model._attributes) {
+              if (
+                !createIndexes ||
+                !model._attributes ||
+                _connections[_modelsConnections[identity]].config.adapter != 'sails-mongo'
+              ) {
                 return callback();
               }
 
@@ -147,7 +153,6 @@ module.exports = function() {
                     indexes = [];
                   }
                   else if (err) {
-
                     return callback();
                   }
 

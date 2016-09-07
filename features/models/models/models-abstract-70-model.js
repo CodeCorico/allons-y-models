@@ -42,7 +42,7 @@ module.exports = function() {
 
       var model = Waterline.Collection.extend(config);
 
-      $DatabaseService.loadModel(name, config.identity, model);
+      $DatabaseService.loadModel(name, config.identity, config.connection, model);
 
       return model;
     };
