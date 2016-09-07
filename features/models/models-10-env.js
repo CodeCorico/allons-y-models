@@ -36,6 +36,10 @@ module.exports = function($allonsy, $env, $done) {
     }
 
     configs.databases.forEach(function(config) {
+      if (config.when) {
+        config.when = typeof config.when == 'string' ? [config.when] : config.when;
+      }
+
       var prefixEnv = 'DB_' + config.name + '_';
 
       databasesConfigs.push(config);
@@ -43,39 +47,50 @@ module.exports = function($allonsy, $env, $done) {
       prompts = prompts.concat([{
         type: 'input',
         name: prefixEnv + 'HOST',
-        message: config.name + '\'s host:',
-        default: _default(prefixEnv + 'HOST', 'localhost')
+        message: 'Host:',
+        default: _default(prefixEnv + 'HOST', 'localhost'),
+        when: [function() {
+          $allonsy.outputWarning('\n  ' + config.name + ' (' + config.type + '):\n');
+          $allonsy.outputInfo('    ' + (config.description || 'no description') + '\n\n');
+
+          return true;
+        }].concat(config.when || [])
       }, {
         type: 'input',
         name: prefixEnv + 'PORT',
-        message: config.name + '\'s port:',
-        default: _default(prefixEnv + 'PORT', defaultPorts[config.type])
+        message: 'Port:',
+        default: _default(prefixEnv + 'PORT', defaultPorts[config.type]),
+        when: config.when || null
       }, {
         type: 'input',
         name: prefixEnv + 'NAME',
-        message: config.name + '\'s database name:',
-        default: _default(prefixEnv + 'NAME', '')
+        message: 'Database name:',
+        default: _default(prefixEnv + 'NAME', ''),
+        when: config.when || null
       }, {
         type: 'input',
         name: prefixEnv + 'USER',
-        message: config.name + '\'s database user:',
-        default: _default(prefixEnv + 'USER', '')
+        message: 'Database user:',
+        default: _default(prefixEnv + 'USER', ''),
+        when: config.when || null
       }, {
         type: 'input',
         name: prefixEnv + 'PASSWORD',
-        message: config.name + '\'s database password:',
-        default: _default(prefixEnv + 'PASSWORD', '')
+        message: 'Database password:',
+        default: _default(prefixEnv + 'PASSWORD', ''),
+        when: config.when || null
       }, {
         type: 'confirm',
         name: prefixEnv + 'POOL',
-        message: 'Enable pool connections for "' + config.name + '":',
-        default: _default(prefixEnv + 'POOL', false)
+        message: 'Enable pool connections:',
+        default: _default(prefixEnv + 'POOL', false),
+        when: config.when || null
       }, {
         type: 'input',
         name: prefixEnv + 'POOL_LIMIT',
-        message: config.name + '\'s pool connections limit:',
+        message: 'Pool connections limit:',
         default: _default(prefixEnv + 'POOL_LIMIT', 20),
-        when: prefixEnv + 'POOL=true'
+        when: [prefixEnv + 'POOL=true'].concat(config.when || [])
       }]);
     });
   });
@@ -84,13 +99,8 @@ module.exports = function($allonsy, $env, $done) {
     $allonsy.outputInfo([
       '\n  Configure your ',
       databasesConfigs.length + ' ' + (databasesConfigs.length > 1 ? 'databases' : 'database'),
-      '\'s ' + (databasesConfigs.length > 1 ? 'connections' : 'connection') + ':\n\n'
+      '\'s ' + (databasesConfigs.length > 1 ? 'connections' : 'connection') + ':\n'
     ].join(''));
-
-    databasesConfigs.forEach(function(config) {
-      $allonsy.outputWarning('  ' + config.name + ' (' + config.type + '):\n');
-      $allonsy.outputInfo('    ' + (config.description || 'no description') + '\n\n');
-    });
   }
 
   $done(prompts);
