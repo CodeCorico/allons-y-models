@@ -199,7 +199,7 @@ module.exports = function() {
 
                       $allonsy.log('allons-y-models', 'models-index-create:' + (model.tableName || model.identity) + ':' + indexName + ':' + identity);
 
-                      $allonsy.outputInfo('  Create index: ' + (model.tableName || model.identity) + '.' + indexName + ' (' + identity + ')\n');
+                      $allonsy.outputInfo('  Create index: ' + (model.tableName || model.identity) + '.' + indexName + ' (' + identity + ')');
                     }
                   });
 

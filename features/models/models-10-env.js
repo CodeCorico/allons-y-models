@@ -51,7 +51,7 @@ module.exports = function($allonsy, $env, $done) {
         default: _default(prefixEnv + 'HOST', 'localhost'),
         when: [function() {
           $allonsy.outputWarning('\n  ' + config.name + ' (' + config.type + '):\n');
-          $allonsy.outputInfo('    ' + (config.description || 'no description') + '\n\n');
+          $allonsy.outputInfo('    ' + (config.description || 'no description') + '\n');
 
           return true;
         }].concat(config.when || [])
@@ -99,7 +99,7 @@ module.exports = function($allonsy, $env, $done) {
     $allonsy.outputInfo([
       '\n  Configure your ',
       databasesConfigs.length + ' ' + (databasesConfigs.length > 1 ? 'databases' : 'database'),
-      '\'s ' + (databasesConfigs.length > 1 ? 'connections' : 'connection') + ':\n'
+      '\'s ' + (databasesConfigs.length > 1 ? 'connections' : 'connection') + ':'
     ].join(''));
   }
 
