@@ -23,9 +23,11 @@ module.exports = function($allonsy, $gulp) {
         var transform = this;
 
         files.forEach(function(file) {
-          file.contents = new Buffer('(' + require(file.path).toString()  + ')();\n');
+          if (file.path.indexOf('-front.js') < 0) {
+            file.contents = new Buffer('(' + require(file.path).toString()  + ')();\n');
 
-          delete require.cache[file.path];
+            delete require.cache[file.path];
+          }
 
           var inModules = file.path.indexOf('node_modules') > -1,
               fileSplitted = file.path.split(path.sep),
