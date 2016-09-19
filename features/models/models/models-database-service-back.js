@@ -17,6 +17,7 @@ module.exports = function() {
           Waterline = require('waterline'),
           _databaseFiles = $allonsy.findInFeaturesSync('*-database.json'),
           _modelsFiles = $allonsy.findInFeaturesSync('models/*-model.js'),
+          _initFiles = $allonsy.findInFeaturesSync('models/*-after-init.js'),
           _waterline = null,
           _models = [],
           _connections = [],
@@ -238,11 +239,28 @@ module.exports = function() {
 
               nextModel();
             }]);
+          }, function() {
+
+            async.eachSeries(_initFiles, function(initFile, nextInitFile) {
+              var initModule = require(path.resolve(initFile));
+
+              DependencyInjection.injector.service.invoke(null, initModule, {
+                service: {
+                  $done: function() {
+                    return nextInitFile;
+                  }
+                }
+              });
+
+            }, function() {
+
+              if (callback) {
+                callback();
+              }
+            });
+
           });
 
-          if (callback) {
-            callback();
-          }
         });
       };
 
