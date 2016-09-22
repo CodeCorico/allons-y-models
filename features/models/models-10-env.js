@@ -36,10 +36,6 @@ module.exports = function($allonsy, $env, $done) {
     }
 
     configs.databases.forEach(function(config) {
-      if (config.when) {
-        config.when = typeof config.when == 'string' ? [config.when] : config.when;
-      }
-
       var prefixEnv = 'DB_' + config.name + '_';
 
       databasesConfigs.push(config);
@@ -49,48 +45,43 @@ module.exports = function($allonsy, $env, $done) {
         name: prefixEnv + 'HOST',
         message: 'Host:',
         default: _default(prefixEnv + 'HOST', 'localhost'),
-        when: [function() {
+        when: function() {
           $allonsy.outputWarning('\n  ' + config.name + ' (' + config.type + '):\n');
           $allonsy.outputInfo('    ' + (config.description || 'no description') + '\n');
 
           return true;
-        }].concat(config.when || [])
+        }
       }, {
         type: 'input',
         name: prefixEnv + 'PORT',
         message: 'Port:',
-        default: _default(prefixEnv + 'PORT', defaultPorts[config.type]),
-        when: config.when || null
+        default: _default(prefixEnv + 'PORT', defaultPorts[config.type])
       }, {
         type: 'input',
         name: prefixEnv + 'NAME',
         message: 'Database name:',
-        default: _default(prefixEnv + 'NAME', ''),
-        when: config.when || null
+        default: _default(prefixEnv + 'NAME', '')
       }, {
         type: 'input',
         name: prefixEnv + 'USER',
         message: 'Database user:',
-        default: _default(prefixEnv + 'USER', ''),
-        when: config.when || null
+        default: _default(prefixEnv + 'USER', '')
       }, {
         type: 'input',
         name: prefixEnv + 'PASSWORD',
         message: 'Database password:',
-        default: _default(prefixEnv + 'PASSWORD', ''),
-        when: config.when || null
+        default: _default(prefixEnv + 'PASSWORD', '')
       }, {
         type: 'confirm',
         name: prefixEnv + 'POOL',
         message: 'Enable pool connections:',
-        default: _default(prefixEnv + 'POOL', false),
-        when: config.when || null
+        default: _default(prefixEnv + 'POOL', false)
       }, {
         type: 'input',
         name: prefixEnv + 'POOL_LIMIT',
         message: 'Pool connections limit:',
         default: _default(prefixEnv + 'POOL_LIMIT', 20),
-        when: [prefixEnv + 'POOL=true'].concat(config.when || [])
+        when: prefixEnv + 'POOL=true'
       }]);
     });
   });
