@@ -8,12 +8,6 @@ module.exports = function() {
 
     return function AbstractService() {
 
-      events.call(this);
-
-      this.isNode = function() {
-        return isNode;
-      };
-
       var _RETRY_TIME = {
             INCREMENT: 1000,
             MAX: 3000
@@ -22,6 +16,12 @@ module.exports = function() {
           _this = this,
           _init = false,
           _config = {};
+
+      events.call(this);
+
+      this.isNode = function() {
+        return isNode;
+      };
 
       this.front = function(callback) {
         if (!isNode) {

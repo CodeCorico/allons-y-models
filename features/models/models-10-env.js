@@ -38,6 +38,40 @@ module.exports = function($allonsy, $env, $done) {
     configs.databases.forEach(function(config) {
       var prefixEnv = 'DB_' + config.name + '_';
 
+      if (config.when) {
+        var whens = typeof config.when == 'string' ? [config.when] : config.when;
+
+        whens = whens
+          .map(function(when) {
+            when = when.split('=');
+
+            if (when.length > 1) {
+              when[0] = when[0].trim();
+              when[1] = when[1].trim();
+
+              when[1] = when[1] == 'true' ? true : when[1];
+              when[1] = when[1] == 'false' ? false : when[1];
+
+              if (when[0]) {
+                return when;
+              }
+            }
+
+            return null;
+          })
+          .filter(function(when) {
+            return !!when;
+          });
+
+        for (var i = 0; i < whens.length; i++) {
+          var when = whens[i];
+
+          if (when[1] != $env[when[0]]) {
+            return;
+          }
+        }
+      }
+
       databasesConfigs.push(config);
 
       prompts = prompts.concat([{
