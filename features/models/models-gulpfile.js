@@ -53,7 +53,13 @@ module.exports = function($allonsy, $gulp) {
       }))
       .pipe($gulp.dist())
       .pipe(sourcemaps.init())
-      .pipe(uglify())
+      .pipe(uglify().on('error', function(err) {
+        $allonsy.logWarning('allons-y-models', 'models:uglify', {
+          error: err
+        });
+
+        this.emit('end');
+      }))
       .pipe(rename({
         extname: '.min.js'
       }))
