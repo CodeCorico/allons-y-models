@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Create and publish models, services and factories.",
   "license": "MIT",
-  "homepage": "http://allons-y.io",
+  "homepage": "https://allons-y.io",
   "author": "CodeCorico <hello@codecorico.com>",
   "bugs": "https://github.com/CodeCorico/allons-y-models/issues",
   "repository": {
@@ -14,10 +14,11 @@
     "node": ">=4.1",
     "npm": ">=3.2"
   },
+  "devDependencies": {
+    "allons-y-dev-chore": "^1.0.0"
+  },
   "dependencies": {
-    "allons-y": "^1.0.0",
-    "allons-y-dotenv": "^1.0.0",
-    "allons-y-express": "^1.0.0",
+    "allons-y-express": "^1.0.2",
     "allons-y-gulp": "^1.0.0",
     "async": "^2.0.1",
     "events-manager": "^1.1.2",
