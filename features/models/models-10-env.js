@@ -74,48 +74,106 @@ module.exports = function($allonsy, $env, $done) {
 
       databasesConfigs.push(config);
 
+      function banner() {
+        $allonsy.outputWarning('\n  ' + config.name + ' (' + config.type + '):\n');
+        $allonsy.outputInfo('    ' + (config.description || 'no description') + '\n');
+      }
+
+      function noPrevious(env) {
+        return !env[prefixEnv + 'USE_PREVIOUS'];
+      }
+
+      var bannerDisplayed = false,
+          previousEnv = null;
+
+      if (prompts.length) {
+        previousEnv = prompts[prompts.length - 1].name
+          .replace('POOL_LIMIT', '')
+          .replace('POOL', '');
+
+        prompts.push({
+          type: 'confirm',
+          name: prefixEnv + 'USE_PREVIOUS',
+          message: 'Use the same database configuration as above:',
+          default: _default(prefixEnv + 'USE_PREVIOUS', true),
+          when: function() {
+            banner();
+
+            return true;
+          }
+        });
+
+        bannerDisplayed = true;
+      }
+
       prompts = prompts.concat([{
         type: 'input',
         name: prefixEnv + 'HOST',
         message: 'Host:',
         default: _default(prefixEnv + 'HOST', 'localhost'),
-        when: function() {
-          $allonsy.outputWarning('\n  ' + config.name + ' (' + config.type + '):\n');
-          $allonsy.outputInfo('    ' + (config.description || 'no description') + '\n');
+        when: function(env) {
+          if (!bannerDisplayed) {
+            banner();
+          }
 
-          return true;
+          var usePrevious = !noPrevious(env);
+
+          if (usePrevious) {
+            ['HOST', 'PORT', 'NAME', 'USER', 'PASSWORD', 'POOL', 'POOL_LIMIT'].forEach(function(envName) {
+              env[prefixEnv + envName] = env[previousEnv + envName];
+            });
+          }
+
+          return !usePrevious;
         }
       }, {
         type: 'input',
         name: prefixEnv + 'PORT',
         message: 'Port:',
-        default: _default(prefixEnv + 'PORT', defaultPorts[config.type])
+        default: _default(prefixEnv + 'PORT', defaultPorts[config.type]),
+        when: function(env) {
+          return noPrevious(env);
+        }
       }, {
         type: 'input',
         name: prefixEnv + 'NAME',
         message: 'Database name:',
-        default: _default(prefixEnv + 'NAME', '')
+        default: _default(prefixEnv + 'NAME', ''),
+        when: function(env) {
+          return noPrevious(env);
+        }
       }, {
         type: 'input',
         name: prefixEnv + 'USER',
         message: 'Database user:',
-        default: _default(prefixEnv + 'USER', '')
+        default: _default(prefixEnv + 'USER', ''),
+        when: function(env) {
+          return noPrevious(env);
+        }
       }, {
         type: 'input',
         name: prefixEnv + 'PASSWORD',
         message: 'Database password:',
-        default: _default(prefixEnv + 'PASSWORD', '')
+        default: _default(prefixEnv + 'PASSWORD', ''),
+        when: function(env) {
+          return noPrevious(env);
+        }
       }, {
         type: 'confirm',
         name: prefixEnv + 'POOL',
         message: 'Enable pool connections:',
-        default: _default(prefixEnv + 'POOL', false)
+        default: _default(prefixEnv + 'POOL', false),
+        when: function(env) {
+          return noPrevious(env);
+        }
       }, {
         type: 'input',
         name: prefixEnv + 'POOL_LIMIT',
         message: 'Pool connections limit:',
         default: _default(prefixEnv + 'POOL_LIMIT', 20),
-        when: prefixEnv + 'POOL=true'
+        when: function(env) {
+          return noPrevious(env) && env[prefixEnv + 'POOL'];
+        }
       }]);
     });
   });
