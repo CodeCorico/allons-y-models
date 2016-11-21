@@ -18,8 +18,8 @@
     "allons-y-dev-chore": "^1.0.0"
   },
   "dependencies": {
-    "allons-y-express": "^1.0.2",
-    "allons-y-gulp": "^1.0.0",
+    "allons-y-express": "^1.0.3",
+    "allons-y-gulp": "^1.0.3",
     "async": "^2.0.1",
     "events-manager": "^1.1.2",
     "extend": "^3.0.0",
