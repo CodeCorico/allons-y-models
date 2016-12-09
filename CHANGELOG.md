@@ -1,3 +1,9 @@
+<a name="1.0.2"></a>
+# [1.0.2](https://github.com/CodeCorico/allons-y-models/compare/1.0.1...1.0.2) (2016-12-09)
+
+### Features
+* **models backup:** add the databases backup task [#f304a81](https://github.com/CodeCorico/allons-y-models/commit/f304a81)
+
 <a name="1.0.1"></a>
 # [1.0.1](https://github.com/CodeCorico/allons-y-models/compare/1.0.0...1.0.1) (2016-11-21)
 
