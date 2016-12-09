@@ -1,0 +1,9 @@
+{
+  "env": [{
+    "type": "confirm",
+    "name": "MODELS_BACKUP",
+    "message": "Backup your databases:",
+    "default": true,
+    "when": "BACKUP=true"
+  }]
+}
